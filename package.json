@@ -18,6 +18,8 @@
     "url": "https://github.com/colbyfayock/next-leaflet-starter/issues"
   },
   "dependencies": {
+    "@tabler/icons-react": "^2.47.0",
+    "axios": "^1.6.7",
     "copy-webpack-plugin": "^11.0.0",
     "leaflet": "^1.9.4",
     "next": "^14.0.1",
