@@ -34,7 +34,6 @@ export default function DeLijnMarkers({ cookieResetTime, Marker, Popup }) {
     } else {
       while (newData.length < totalCount) {
         const response = await axios.get(customUrl(limit, offset))
-        console.log(response)
         newData = newData.concat(response.data.results)
         offset += limit
       }
@@ -52,15 +51,15 @@ export default function DeLijnMarkers({ cookieResetTime, Marker, Popup }) {
       { data && data.map((halte) => {
         return (
           <Marker key={halte.haltenummer} position={[halte.latitude, halte.longitude]}
-           icon={L.icon({
+            icon={L.icon({
               iconUrl: '/leaflet/images/De_Lijn.png',
               iconSize: [25, 25]
             })}
             >
             <Popup>
               <div style={{ width: '450px'}}>
-                <h2>Halte {halte.haltenummer} - De Lijn</h2>
-                <p>Halte naam: {halte.omschrijving}</p>
+                <h2 style={{maxWidth: '320px'}}>Halte {halte.omschrijving}</h2>
+                <p>Halte nummer: {halte.haltenummer}</p>
                 <iframe src={`https://www.delijn.be/realtime/${halte.haltenummer}/15`} width="320" height="400"></iframe>
               </div>
             </Popup>
