@@ -17,7 +17,7 @@ const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
 const BOLT_DATASET_NAME = 'bolt-deelfietsen-gent';
 
 export default function Dott() {
-  const datasetUrl = (datasetName, limit, offset) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/${DOTT_DATASET_NAME}/records?order_by=100&limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`;
+  const datasetUrl = (datasetName, limit, offset) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/${datasetName}/records?order_by=100&limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`;
 
   /**
    * DOTT
@@ -28,7 +28,7 @@ export default function Dott() {
 
   useEffect(() => {    
     axios
-      .get('https://data.stad.gent/api/explore/v2.1/catalog/datasets/dott-deelfietsen-gent/records?limit=1')
+      .get(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${DOTT_DATASET_NAME}/records?limit=1`)
       .then((response) => {
         setTotalDottCount(response.data.total_count);
       });
@@ -48,7 +48,6 @@ export default function Dott() {
       // Keep fetching until all data is fetched
       while (offset < totalDottCount) {
         const customDottUrl = datasetUrl(DOTT_DATASET_NAME, limit, offset);
-        console.log("customDottUrl", customDottUrl);
         const response = await axios.get(customDottUrl);
         data = data.concat(response.data.results);
         offset += limit;
@@ -83,8 +82,8 @@ export default function Dott() {
 
   useEffect(() => {
     axios
-      .get('https://data.stad.gent/api/explore/v2.1/catalog/datasets/bolt-deelfietsen-gent/records?limit=1')
-      .then((response) => {
+    .get(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${BOLT_DATASET_NAME}/records?limit=1`)
+    .then((response) => {
         setTotalBoltCount(response.data.total_count);
       });
   }, []);
@@ -105,6 +104,7 @@ export default function Dott() {
         const customBoltUrl = datasetUrl(BOLT_DATASET_NAME, limit, offset);
         console.log("customBoltUrl", customBoltUrl);
         const response = await axios.get(customBoltUrl);
+        console.log("res data", response.data)
         boltData = boltData.concat(response.data.results);
         offset += limit;
       }
@@ -117,6 +117,7 @@ export default function Dott() {
       boltData = boltData.filter((result, index, self) => self.findIndex((t) => t.bike_id === result.bike_id) === index);
       localStorage.setItem('boltData', JSON.stringify(boltData));
       localStorage.setItem('boltDataTimestamp', currentTime.toString());
+      console.log("boltData", boltData)
     }
     setBoltData(boltData);
     setBoltLocations(boltData.map((result) => [result?.lat, result?.lon]));
