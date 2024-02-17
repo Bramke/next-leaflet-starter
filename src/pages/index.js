@@ -13,56 +13,122 @@ import { useEffect, useState } from 'react';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
 const DEFAULT_CENTER = [51.05, 3.71667];
+const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
+const BOLT_DATASET_NAME = 'bolt-deelfietsen-gent';
 
 export default function Dott() {
+  const datasetUrl = (datasetName, limit, offset) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/${DOTT_DATASET_NAME}/records?order_by=100&limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`;
+
+  /**
+   * DOTT
+   */
   const [dottData, setDottData] = useState(null);
   const [dottLocations, setDottLocations] = useState(null);
-  const [totalCount, setTotalCount] = useState(null);
-  //const url = (skip, limit) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/dott-deelfietsen-gent/records?limit=${limit}&skip=${skip}`;
-  const url = (limit, offset) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/dott-deelfietsen-gent/records?order_by=100&limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`;
+  const [totalDottCount, setTotalDottCount] = useState(null);
 
   useEffect(() => {    
     axios
       .get('https://data.stad.gent/api/explore/v2.1/catalog/datasets/dott-deelfietsen-gent/records?limit=1')
       .then((response) => {
-        setTotalCount(response.data.total_count);
+        setTotalDottCount(response.data.total_count);
       });
   }, []);
 
-  console.log("dottData", dottData);
+  const fetchDottData = async () => {
+    const storageData = localStorage.getItem('dottData');
+    const storageTimestamp = localStorage.getItem('dottDataTimestamp');
+    const currentTime = new Date().getTime();
+    let data = [];
+
+    if (storageData && storageTimestamp && currentTime - storageTimestamp < 120000) { // 2 minutes in milliseconds
+      data = JSON.parse(storageData);
+    } else {
+      let limit = 100;
+      let offset = 0;
+      // Keep fetching until all data is fetched
+      while (offset < totalDottCount) {
+        const customDottUrl = datasetUrl(DOTT_DATASET_NAME, limit, offset);
+        console.log("customDottUrl", customDottUrl);
+        const response = await axios.get(customDottUrl);
+        data = data.concat(response.data.results);
+        offset += limit;
+      }
+      // Clean the data
+      // Only keep valid long, lad data
+      data = data.filter((result) => result?.lat && result?.lon);
+      // Only keep non disabled bikes
+      data = data.filter((result) => result?.is_disabled === 0);
+      // Remove duplicates
+      data = data.filter((result, index, self) => self.findIndex((t) => t.bike_id === result.bike_id) === index);
+      localStorage.setItem('dottData', JSON.stringify(data));
+      localStorage.setItem('dottDataTimestamp', currentTime.toString());
+    }
+    setDottData(data);
+    setDottLocations(data.map((result) => [result?.lat, result?.lon]));
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const storageData = localStorage.getItem('dottData');
-      const storageTimestamp = localStorage.getItem('dottDataTimestamp');
-      const currentTime = new Date().getTime();
-      let data = [];
+    if (totalDottCount > 0) {
+      fetchDottData();
+    }
+  }, [totalDottCount]);
 
-      if (storageData && storageTimestamp && currentTime - storageTimestamp < 120000) { // 2 minutes in milliseconds
-        data = JSON.parse(storageData);
-      } else {
-        let limit = 100;
-        let offset = 0;
-        // Keep fetching until all data is fetched
-        while (offset < totalCount) {
-          const customUrl = url(limit, offset);
-          console.log("customURl", customUrl);
-          const response = await axios.get(customUrl);
-          data = data.concat(response.data.results);
-          offset += limit;
-        }
-        localStorage.setItem('dottData', JSON.stringify(data));
-        localStorage.setItem('dottDataTimestamp', currentTime.toString());
+  /**
+   * BOLT
+   */
+  
+  const [boltData, setBoltData] = useState(null);
+  const [boltLocations, setBoltLocations] = useState(null);
+  const [totalBoltCount, setTotalBoltCount] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get('https://data.stad.gent/api/explore/v2.1/catalog/datasets/bolt-deelfietsen-gent/records?limit=1')
+      .then((response) => {
+        setTotalBoltCount(response.data.total_count);
+      });
+  }, []);
+
+  const fetchBoltData = async () => {
+    const storageData = localStorage.getItem('boltData');
+    const storageTimestamp = localStorage.getItem('boltDataTimestamp');
+    const currentTime = new Date().getTime();
+    let boltData = [];
+
+    if (storageData && storageTimestamp && currentTime - storageTimestamp < 120000) { // 2 minutes in milliseconds
+      boltData = JSON.parse(storageData);
+    } else {
+      let limit = 100;
+      let offset = 0;
+      // Keep fetching until all data is fetched
+      while (offset < totalBoltCount) {
+        const customBoltUrl = datasetUrl(BOLT_DATASET_NAME, limit, offset);
+        console.log("customBoltUrl", customBoltUrl);
+        const response = await axios.get(customBoltUrl);
+        boltData = boltData.concat(response.data.results);
+        offset += limit;
       }
-      setDottData(data);
-      setDottLocations(data.map((result) => [result?.lat, result?.lon]));
+      // Clean the data
+      // Only keep valid long, lad data
+      boltData = boltData.filter((result) => result?.lat && result?.lon);
+      // Only keep non disabled bikes
+      boltData = boltData.filter((result) => result?.is_disabled === 0);
+      // Remove duplicates
+      boltData = boltData.filter((result, index, self) => self.findIndex((t) => t.bike_id === result.bike_id) === index);
+      localStorage.setItem('boltData', JSON.stringify(boltData));
+      localStorage.setItem('boltDataTimestamp', currentTime.toString());
     }
-    if (totalCount > 0) {
-      fetchData();
-    }
-  }, [totalCount]);
+    setBoltData(boltData);
+    setBoltLocations(boltData.map((result) => [result?.lat, result?.lon]));
+  }
 
-  console.log("dottData", dottData);
+  useEffect(() => {
+    if (totalBoltCount > 0) {
+      fetchBoltData();
+    }
+  }, [totalBoltCount]);
+
+
 
   /**
    * Generates style object based on the current range in meters.
@@ -99,7 +165,7 @@ export default function Dott() {
       <Section>
         <Container>
           <h1 className={styles.title}>Dott Map</h1>
-          {dottData && (
+          {dottData && boltData && (
             <Map className={styles.homeMap} width="800" height="400" center={dottLocations[0] || DEFAULT_CENTER} zoom={13}>
               {({ TileLayer, Marker, Popup }) => (
                 <>
@@ -107,8 +173,7 @@ export default function Dott() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                   />
-                  {/* Render markers only if dottData is available */}
-                  {dottData &&
+                  {dottData && 
                     dottData.map((bike) => (
                       bike?.lat && bike?.lon && (
                         <Marker color="red" key={bike.bike_id} position={[bike.lat, bike.lon]} icon={L.icon({
@@ -119,6 +184,23 @@ export default function Dott() {
                           <Popup>
                             <div>
                               <h2>Dott Bike{bike.bike_id}</h2>
+                              <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
+                              <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
+                              <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    ))}
+                    {boltData && 
+                      boltData.map((bike) => (
+                      bike?.lat && bike?.lon && (
+                        <Marker color="red" key={bike.bike_id} position={[bike.lat, bike.lon]} 
+                        >
+
+                          <Popup>
+                            <div>
+                              <h2>Bolt Bike{bike.bike_id}</h2>
                               <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
                               <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
                               <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
