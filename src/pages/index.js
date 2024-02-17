@@ -26,7 +26,7 @@ export default function Dott() {
   const [dottLocations, setDottLocations] = useState(null);
   const [totalDottCount, setTotalDottCount] = useState(null);
 
-  useEffect(() => {    
+  useEffect(() => {
     axios
       .get(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${DOTT_DATASET_NAME}/records?limit=1`)
       .then((response) => {
@@ -75,15 +75,15 @@ export default function Dott() {
   /**
    * BOLT
    */
-  
+
   const [boltData, setBoltData] = useState(null);
   const [boltLocations, setBoltLocations] = useState(null);
   const [totalBoltCount, setTotalBoltCount] = useState(null);
 
   useEffect(() => {
     axios
-    .get(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${BOLT_DATASET_NAME}/records?limit=1`)
-    .then((response) => {
+      .get(`https://data.stad.gent/api/explore/v2.1/catalog/datasets/${BOLT_DATASET_NAME}/records?limit=1`)
+      .then((response) => {
         setTotalBoltCount(response.data.total_count);
       });
   }, []);
@@ -129,22 +129,6 @@ export default function Dott() {
     }
   }, [totalBoltCount]);
 
-  const mapContainerRef = useRef(null);
-  const [mapWidth, setMapWidth] = useState(0);
-
-  useEffect(() => {
-    const updateMapWidth = () => {
-      if (mapContainerRef.current) {
-        setMapWidth(mapContainerRef.current.offsetWidth);
-      }
-    };
-
-    updateMapWidth(); // Set initial width
-    window.addEventListener('resize', updateMapWidth);
-
-    return () => window.removeEventListener('resize', updateMapWidth);
-  }, []);
-
   /**
    * Generates style object based on the current range in meters.
    * Red when less than 5 km
@@ -169,6 +153,19 @@ export default function Dott() {
     };
   }
 
+  const [userLocation, setUserLocation] = useState(null);
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      });
+    } else {
+      alert('Geolocation is not supported by your browser.');
+    }
+  };
+  useEffect(() => {
+    getUserLocation();
+  }, []);
   return (
     <Layout>
       <Head>
@@ -179,63 +176,61 @@ export default function Dott() {
 
       <Section>
         <Container>
-          <div ref={mapContainerRef}>
-            {dottData && boltData && (
-              <Map className={styles.homeMap} width={mapWidth} height="400" center={dottLocations[0] || DEFAULT_CENTER} zoom={13}>
-                {({ TileLayer, Marker, Popup }) => (
-                  <>
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                    />
-                    {dottData && 
-                      dottData.map((bike) => (
-                        bike?.lat && bike?.lon && (
-                          <Marker color="red" key={bike.bike_id} position={[bike.lat, bike.lon]} icon={L.icon({
-                            iconUrl: '/leaflet/images/dott.png',
+          {dottData && boltData && (
+            <Map className={styles.homeMap} center={userLocation || DEFAULT_CENTER} zoom={16}>
+              {({ TileLayer, Marker, Popup, useMap }) => (
+                <>
+                  <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+                  />
+                  {dottData &&
+                    dottData.map((bike) => (
+                      bike?.lat && bike?.lon && (
+                        <Marker color="red" key={bike.bike_id} position={[bike.lat, bike.lon]} icon={L.icon({
+                          iconUrl: '/leaflet/images/dott.png',
+                          iconSize: [25, 25]
+                        })}>
+
+                          <Popup>
+                            <div>
+                              <h2>Dott Bike</h2>
+                              <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
+                              <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
+                              <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    ))}
+                  {boltData &&
+                    boltData.map((bike) => (
+                      bike?.lat && bike?.lon && (
+                        <Marker
+                          color="red"
+                          key={bike.bike_id}
+                          position={[bike.lat, bike.lon]}
+                          icon={L.icon({
+                            iconUrl: '/leaflet/images/bolt.png',
                             iconSize: [25, 25]
-                          })}>
+                          })}
+                        >
 
-                            <Popup>
-                              <div>
-                                <h2>Dott Bike</h2>
-                                <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
-                                <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
-                                <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
-                              </div>
-                            </Popup>
-                          </Marker>
-                        )
-                      ))}
-                      {boltData && 
-                        boltData.map((bike) => (
-                        bike?.lat && bike?.lon && (
-                          <Marker 
-                            color="red" 
-                            key={bike.bike_id} 
-                            position={[bike.lat, bike.lon]} 
-                            icon={L.icon({
-                              iconUrl: '/leaflet/images/bolt.png',
-                              iconSize: [25, 25]
-                            })}
-                          >
-
-                            <Popup>
-                              <div>
-                                <h2>Bolt Bike</h2>
-                                <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
-                                <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
-                                <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
-                              </div>
-                            </Popup>
-                          </Marker>
-                        )
-                      ))}
-                  </>
-                )}
-              </Map>
-            )}
-          </div>
+                          <Popup>
+                            <div>
+                              <h2>Bolt Bike</h2>
+                              <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
+                              <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
+                              <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
+                            </div>
+                          </Popup>
+                        </Marker>
+                      )
+                    ))}
+                </>
+              )}
+            </Map>
+          )}
         </Container>
       </Section>
     </Layout>
