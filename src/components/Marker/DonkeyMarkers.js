@@ -40,46 +40,47 @@ export default function DonkeyMarkers({ cookieResetTime, Marker, Popup }) {
     "name": "Opgeëistenlaan 401"
   }
   */
- console.log("kjdmfqdmlkjmlkqjm totalCount", totalCount)
   const getDonkeyData = async () => {
-    console.log("kjdmfqdmlkjmlkqjm getDonkeyData")
     let limit = 100;
-    let offset = 0;
     let newData = [];
-    while (offset < totalCount) {
-      const url = createUrl(limit, offset);
-      const response = await axios.get(url);
+    const fetchData = async () => {
+      let offset = 0;
+      let fetchedData = [];
+      
+      do {
+        const url = createUrl(limit, offset);
+        const response = await axios.get(url);
+        fetchedData.push(...response.data.results);
+        offset += limit;
+      } while (offset < totalCount);
+      
+      return fetchedData;
+    };
 
-      console.log("kjdmfqdmlkjmlkqjm", offset)
-      newData = newData.concat(response.data.results);
-      offset += limit;
-    }
-    // Filter out those without geopunt
-    newData = newData.filter((station) => station.geopunt);
-    // Filter out num_bikes_available = 0
-    newData = newData.filter((station) => station.num_bikes_available > 0);
-    // Set donkeyData in local storage
-    localStorage.setItem('donkeyData', JSON.stringify(newData));
-    return newData;
-  }
+    const fetchedData = await fetchData();
+
+    // Filter out stations without geopunt and num_bikes_available = 0
+    const cleanedData = fetchedData.filter((station) => station.geopunt && station.num_bikes_available > 0);
+
+    localStorage.setItem('donkeyData', JSON.stringify(cleanedData));
+    return cleanedData;
+  };
 
   useEffect(() => {
     const storageData = localStorage.getItem('donkeyData');
     const storageTimestamp = localStorage.getItem('donkeyDataTimestamp');
     const currentTime = new Date().getTime();
-    console.log("kjdmfqdmlkjmlkqjm useEffect")
 
-    if (storageData && storageTimestamp && (currentTime - storageTimestamp < cookieResetTime || storageData.length < 0)) {
+    if (storageData && storageTimestamp && currentTime - storageTimestamp < cookieResetTime) {
       setData(JSON.parse(storageData));
     } else {
       getDonkeyData().then((data) => {
-        
         setData(data);
         localStorage.setItem('donkeyData', JSON.stringify(data));
         localStorage.setItem('donkeyDataTimestamp', currentTime.toString());
       });
     }
-  }, []);
+  }, [cookieResetTime]);
 
   return (
     <>
