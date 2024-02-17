@@ -29,13 +29,12 @@ export default function DeLijnMarkers({ cookieResetTime, Marker, Popup }) {
     const storageTimestamp = localStorage.getItem('DeLijnDataTimestamp');
     const currentTime = new Date().getTime();
 
-    if (storageData && storageTimestamp && currentTime - storageTimestamp < cookieResetTime) {
+    if (storageData?.length < 0 && storageTimestamp && currentTime - storageTimestamp < cookieResetTime) {
       newData = JSON.parse(storageData);
     } else {
       while (newData.length < totalCount) {
         const response = await axios.get(customUrl(limit, offset))
         console.log(response)
-        await new Promise(r => setTimeout(r, 500));
         newData = newData.concat(response.data.results)
         offset += limit
       }
