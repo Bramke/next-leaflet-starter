@@ -183,7 +183,7 @@ export default function Dott() {
 
                           <Popup>
                             <div>
-                              <h2>Dott Bike{bike.bike_id}</h2>
+                              <h2>Dott Bike</h2>
                               <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
                               <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
                               <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
@@ -195,12 +195,19 @@ export default function Dott() {
                     {boltData && 
                       boltData.map((bike) => (
                       bike?.lat && bike?.lon && (
-                        <Marker color="red" key={bike.bike_id} position={[bike.lat, bike.lon]} 
+                        <Marker 
+                          color="red" 
+                          key={bike.bike_id} 
+                          position={[bike.lat, bike.lon]} 
+                          icon={L.icon({
+                            iconUrl: '/leaflet/images/bolt.png',
+                            iconSize: [25, 25]
+                          })}
                         >
 
                           <Popup>
                             <div>
-                              <h2>Bolt Bike{bike.bike_id}</h2>
+                              <h2>Bolt Bike</h2>
                               <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
                               <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
                               <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
