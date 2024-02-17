@@ -87,6 +87,10 @@ const DottOrBoltMarkers = ({DatasetName, CookieResetTime, Marker, Popup}) => {
       color: 'green'
     };
   }
+  const isAndroid = () => {
+    return navigator.userAgent.toLowerCase().indexOf("android") > -1;
+  }
+  console.log("isAndroid", isAndroid());
 
   return (
     <>
@@ -102,8 +106,7 @@ const DottOrBoltMarkers = ({DatasetName, CookieResetTime, Marker, Popup}) => {
                 <div>
                   <h2>{markerType === MarkerType.DOT ? "Dott Bike" : "Bolt Bike"}</h2>
                   <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
-                  <Button href={JSON.parse(bike?.rental_uris).android}>Rent on Android</Button>
-                  <Button href={JSON.parse(bike?.rental_uris).ios}>Rent on iOS</Button>
+                  <Button href={JSON.parse(bike?.rental_uris)[isAndroid ? 'android' : 'ios']}>Rent on {isAndroid ? 'Android' : 'iOS'}</Button>
                 </div>
               </Popup>
             </Marker>
