@@ -14,32 +14,11 @@ export default function DonkeyMarkers({ cookieResetTime, Marker, Popup }) {
       setTotalCount(response.data.total_count);
     });
   }, []);
-  //example url   'https://data.stad.gent/api/explore/v2.1/catalog/datasets/donkey-republic-beschikbaarheid-deelfietsen-per-station/records?order_by=100&limit=10&offset=0&timezone=UTC&include_links=false&include_app_metas=false' \
+
   const createUrl = (limit, offset) => {
     return `https://data.stad.gent/api/explore/v2.1/catalog/datasets/donkey-republic-beschikbaarheid-deelfietsen-per-station/records?limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`
   }
-  /*
-  {
-    "_links": [
-        {
-            "rel": "self",
-            "href": "https://data.stad.gent/api/explore/v2.1/catalog/datasets/donkey-republic-beschikbaarheid-deelfietsen-per-station/records/"
-        }
-    ],
-    "station_id": "12392",
-    "num_bikes_available": 3,
-    "num_docks_available": 3,
-    "is_renting": 1,
-    "is_installed": 1,
-    "is_returning": 1,
-    "last_reported": "1708070338",
-    "geopunt": {
-        "lon": 3.7159931,
-        "lat": 51.0630685
-    },
-    "name": "Opgeëistenlaan 401"
-  }
-  */
+
   const getDonkeyData = async () => {
     let limit = 100;
     let newData = [];

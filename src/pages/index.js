@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from 'react';
 import DottOrBoltMarkers from '@components/Marker/DottOrBoltMarkers';
 import BlueBikeMarkers from '@components/Marker/BlueBikeMarkers';
 import DonkeyMarkers from '@components/Marker/DonkeyMarkers';
+import DeLijnMarkers from '@components/Marker/DeLijnMarkers';
 
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
@@ -68,6 +69,7 @@ export default function Dott() {
                     <DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} CookieResetTime={COOKIE_RESET_TIME}   Marker={Marker} Popup={Popup} />
                     <BlueBikeMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
                     <DonkeyMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
+                    <DeLijnMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
                 </>
               )}
             </Map>
