@@ -15,6 +15,7 @@ const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamic
 const DEFAULT_CENTER = [51.05, 3.71667];
 const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
 const BOLT_DATASET_NAME = 'bolt-deelfietsen-gent';
+const COOKIE_RESET_TIME = 120000
 
 export default function Dott() {
   const datasetUrl = (datasetName, limit, offset) => `https://data.stad.gent/api/explore/v2.1/catalog/datasets/${datasetName}/records?order_by=100&limit=${limit}&offset=${offset}&timezone=UTC&include_links=true&include_app_metas=false`;
@@ -40,7 +41,7 @@ export default function Dott() {
     const currentTime = new Date().getTime();
     let data = [];
 
-    if (storageData && storageTimestamp && currentTime - storageTimestamp < 120000) { // 2 minutes in milliseconds
+    if (storageData && storageTimestamp && currentTime - storageTimestamp < COOKIE_RESET_TIME) { // 2 minutes in milliseconds
       data = JSON.parse(storageData);
     } else {
       let limit = 100;
@@ -94,7 +95,7 @@ export default function Dott() {
     const currentTime = new Date().getTime();
     let boltData = [];
 
-    if (storageData && storageTimestamp && currentTime - storageTimestamp < 120000) { // 2 minutes in milliseconds
+    if (storageData && storageTimestamp && currentTime - storageTimestamp < COOKIE_RESET_TIME) { // 2 minutes in milliseconds
       boltData = JSON.parse(storageData);
     } else {
       let limit = 100;
@@ -153,19 +154,30 @@ export default function Dott() {
     };
   }
 
-  const [userLocation, setUserLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState(DEFAULT_CENTER);
   const getUserLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      });
+    const storageLocation = localStorage.getItem('userLocation');
+    const storageTimestamp = localStorage.getItem('userLocationTimestamp');
+    const currentTime = new Date().getTime();
+    if (storageLocation && storageTimestamp && currentTime - storageTimestamp < COOKIE_RESET_TIME) {
+      setUserLocation(JSON.parse(storageLocation));
     } else {
-      alert('Geolocation is not supported by your browser.');
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          const location = [position.coords.latitude, position.coords.longitude];
+          setUserLocation(location);
+          localStorage.setItem('userLocation', JSON.stringify(location));
+          localStorage.setItem('userLocationTimestamp', currentTime.toString());
+        });
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
     }
   };
   useEffect(() => {
     getUserLocation();
   }, []);
+
   return (
     <Layout>
       <Head>
@@ -175,9 +187,10 @@ export default function Dott() {
       </Head>
 
       <Section>
+      {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
         <Container>
           {dottData && boltData && (
-            <Map className={styles.homeMap} center={userLocation || DEFAULT_CENTER} zoom={16}>
+            <Map className={styles.homeMap} center={userLocation} zoom={16}>
               {({ TileLayer, Marker, Popup, useMap }) => (
                 <>
                   <TileLayer
