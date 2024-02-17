@@ -58,10 +58,10 @@ export default function DeLijnMarkers({ cookieResetTime, Marker, Popup }) {
             })}
             >
             <Popup>
-              <div style={{ width: '450px' }}>
+              <div style={{ width: '450px'}}>
                 <h2>Halte {halte.haltenummer} - De Lijn</h2>
                 <p>Halte naam: {halte.omschrijving}</p>
-                <iframe src={`https://www.delijn.be/realtime/${halte.haltenummer}/15`} width="320" height="auto"></iframe>
+                <iframe src={`https://www.delijn.be/realtime/${halte.haltenummer}/15`} width="320" height="400"></iframe>
               </div>
             </Popup>
           </Marker>
