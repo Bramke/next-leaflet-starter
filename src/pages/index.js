@@ -10,6 +10,8 @@ import axios from 'axios';
 import styles from '@styles/Home.module.scss';
 import { useEffect, useState, useRef } from 'react';
 import DottOrBoltMarkers from '@components/Marker/DottOrBoltMarkers';
+import BlueBikeMarkers from '@components/Marker/BlueBikeMarkers';
+import DonkeyMarkers from '@components/Marker/DonkeyMarkers';
 
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
@@ -64,6 +66,8 @@ export default function Dott() {
                   />
                     <DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} CookieResetTime={COOKIE_RESET_TIME}   Marker={Marker} Popup={Popup} />
                     <DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} CookieResetTime={COOKIE_RESET_TIME}   Marker={Marker} Popup={Popup} />
+                    <BlueBikeMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
+                    <DonkeyMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
                 </>
               )}
             </Map>
