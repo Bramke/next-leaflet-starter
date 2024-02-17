@@ -1,11 +1,12 @@
 .container {
   width: 100%;
-  max-width: 1024px;
-  padding: 0 2em;
+  max-width: none; /* Allow container to take all available space */
+  padding: 0; /* Remove padding for mobile */
   margin: 0 auto;
+  background-color: gray; /* Set background color to gray */
 
   @media (max-width: 720px) {
-    padding: 0 1em;
+    padding: 0; /* Ensure padding is removed for mobile */
   }
 
   h2,

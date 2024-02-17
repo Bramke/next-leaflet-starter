@@ -1,27 +1,27 @@
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 
-import Container from '@components/Container';
+import HeaderContainer from '@components/HeaderContainer';
 
 import styles from './Header.module.scss';
 
 const Header = () => {
   return (
     <header className={styles.header}>
-      <Container className={styles.headerContainer}>
+      <HeaderContainer className={styles.headerContainer}>
         <p className={styles.headerTitle}>
           <Link href="/">
-            Gent Open Data Visualisatie
+            Ghent rental bike visualisation
           </Link>
         </p>
-        <ul className={styles.headerLinks}>
+         <ul className={styles.headerLinks}>
           <li>
-            <a href="https://github.com/colbyfayock/next-leaflet-starter" rel="noreferrer">
+            <a href="https://github.com/bramke" rel="noreferrer">
               <FaGithub />
             </a>
           </li>
         </ul>
-      </Container>
+      </HeaderContainer>
     </header>
   );
 };
