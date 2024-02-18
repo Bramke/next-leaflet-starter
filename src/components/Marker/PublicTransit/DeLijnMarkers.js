@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
-import { Avatar, Entity, EntityField, Menu, MenuButton, MenuItem, MenuWrapper, fs, Button, Text, Code } from 'nextjs-components';
+import { Avatar, Entity, EntityField, Menu, MenuButton, MenuItem, MenuWrapper, fs, Button, Text, Code, Spacer } from 'nextjs-components';
+import { IconDeviceMobileMessage } from '@tabler/icons-react';
 
 export default function DeLijnMarkers({ Marker, Popup }) {
   const { data: markerData } = useSWR('/api/publicTransit/delijn', axios);
@@ -25,7 +26,8 @@ export default function DeLijnMarkers({ Marker, Popup }) {
                 </fs.Content>
                 <fs.Footer>
                   <fs.Footer.Status>
-                    <Button size="small" onClick={() => window.open(`sms:4884&body=DLD`)}>SMS Ticket</Button>
+                    <Button size="small" prefix={<IconDeviceMobileMessage />} style={{marginRight: '10px'}} onClick={() => window.open(`sms:4884&body=DL`)}>1U Ticket</Button>
+                    <Button size="small" prefix={<IconDeviceMobileMessage />} onClick={() => window.open(`sms:4884&body=DLD`)}>DAG Ticket</Button>
                   </fs.Footer.Status>
                   <fs.Footer.Actions>
                     <Button size="small" onClick={() => window.open(`https://www.delijn.be/en/haltes/${halte.haltenummer}/`)}>Halte Info</Button>

@@ -34,12 +34,17 @@ const SettingsProvider = ({ children }) => {
   useEffect(() => {
     const storedSettings = localStorage.getItem('settings');
     if (storedSettings) {
-      setSettings(JSON.parse(storedSettings));
+      const parsedSettings = JSON.parse(storedSettings);
+      if (Object.keys(parsedSettings).length > 0) {
+        setSettings(parsedSettings);
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('settings', JSON.stringify(settings));
+    if (Object.keys(settings).length > 0) {
+      localStorage.setItem('settings', JSON.stringify(settings));
+    }
   }, [settings]);
 
   return (
@@ -50,4 +55,3 @@ const SettingsProvider = ({ children }) => {
 };
 
 export default SettingsProvider;
-
