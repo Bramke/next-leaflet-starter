@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Button from '@components/Button';
+import { fs, Button } from 'nextjs-components';
 
 import axios from 'axios';
 import useSWR from 'swr'
@@ -20,16 +20,24 @@ export default function BlueBikeMarkers({ Marker, Popup }) {
             })}
           >
             <Popup>
-              <div>
-                <h2>Blue Bike {bikeData.name}</h2>
-                <p><b>Currently available: </b>{bikeData.bikes_in_use} / {bikeData.bikes_available}</p>
-                <Button href='https://www.blue-bike.be/en/'>
-                    More info
+              <fs.Fieldset>
+                <fs.Content>
+                  <fs.Title>Blue Bike {bikeData.name}</fs.Title>
+                  <fs.Subtitle><b>Currently available: </b>{bikeData.bikes_in_use} / {bikeData.bikes_available}</fs.Subtitle>
+                </fs.Content>
+                <fs.Footer>
+                <fs.Footer.Status>
+                  <Button href='https://www.blue-bike.be/'>
+                    Meer Info
                 </Button>
+                </fs.Footer.Status>
+                  <fs.Footer.Actions>
                 <Button href='https://www.blue-bike.be/en/pricing/'>
-                    Pricing info
+                    Tarieven
                 </Button>
-              </div>
+                  </fs.Footer.Actions>
+                </fs.Footer>
+              </fs.Fieldset>
             </Popup>
           </Marker>
         )

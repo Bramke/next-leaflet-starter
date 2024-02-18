@@ -1,9 +1,8 @@
-import Button from '@components/Button';
 import axios from 'axios';
 import useSWR from 'swr'
 
+import { fs, Button } from 'nextjs-components';
 
-import { useEffect, useState } from 'react';
 
 const MarkerType = {
   DOT: 'dot',
@@ -50,11 +49,19 @@ const DottOrBoltMarkers = ({DatasetName, Marker, Popup}) => {
             })}>
 
               <Popup>
-                <div>
-                  <h2>{markerType === MarkerType.DOT ? "Dott Bike" : "Bolt Bike"}</h2>
-                  <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
-                  <Button href={JSON.parse(bike?.rental_uris).ios}>Rent This bike</Button>
-                </div>
+                <fs.Fieldset>
+                <fs.Content>
+                  <fs.Title>{markerType === MarkerType.DOT ? "Dott Bike" : "Bolt Bike"}</fs.Title>
+                  {/* <fs.Subtitle><IconInfoCircle size={15} />
+                    <b> Non Electric bikes</b></fs.Subtitle> */}
+                    <p style={generateStyles(bike?.current_range_meters)}><b>Current Range: </b>{(bike?.current_range_meters / 1000).toFixed(2)}km</p>
+                </fs.Content>
+                <fs.Footer>
+                  <fs.Footer.Actions>
+                    <Button href={JSON.parse(bike?.rental_uris).ios}>Rent Bike</Button>
+                  </fs.Footer.Actions>
+                </fs.Footer>
+              </fs.Fieldset>
               </Popup>
             </Marker>
           )

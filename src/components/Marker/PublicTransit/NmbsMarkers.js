@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
-import Button from '@components/Button';
+import { fs, Button } from 'nextjs-components';
 
 export default function NmbsMarkers({ Marker, Popup }) {
   const { data: markerData } = useSWR('/api/publicTransit/nmbs', axios);
@@ -17,13 +17,19 @@ export default function NmbsMarkers({ Marker, Popup }) {
               })}
           >
             <Popup>
-              <div>
-                <h2>Halte {markerData.data[station].naam}</h2>
-                <p>Stiptheid: {(markerData.data[station].stiptheid).toFixed(2)}%</p>
-                <Button onClick={() => window.open(`http://www.belgianrail.be/nl/stations-en-trein/zoek-een-station/11/${markerData.data[station].naam}.aspx`, '_blank')}>
-                  Open website
-                </Button>
-              </div>
+              <fs.Fieldset>
+                <fs.Content>
+                  <fs.Title>Halte {markerData.data[station].naam}</fs.Title>
+                  <fs.Subtitle>Stiptheid: {(markerData.data[station].stiptheid).toFixed(2)}%</fs.Subtitle>
+                </fs.Content>
+                <fs.Footer>
+                  <fs.Footer.Actions>
+                    <Button onClick={() => window.open(`http://www.belgianrail.be/nl/stations-en-trein/zoek-een-station/11/${markerData.data[station].naam}.aspx`, '_blank')}>
+                      Halte Info
+                    </Button>
+                  </fs.Footer.Actions>
+                </fs.Footer>
+              </fs.Fieldset>
             </Popup>
           </Marker>
         )

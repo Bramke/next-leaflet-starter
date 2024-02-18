@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import useSWR from 'swr'
-import Button from '@components/Button';
+import { fs, Button } from 'nextjs-components';
 
 export default function AutoCarsMarkers({ Marker, Popup }) {
   const { data: markerData } = useSWR('/api/publicTransit/autocars', axios);
@@ -17,13 +17,19 @@ export default function AutoCarsMarkers({ Marker, Popup }) {
               })}
           >
             <Popup>
-              <div>
-                <h2>Halte {markerData.data[company].name}</h2>
-                <p>{markerData.data[company].description}</p>
-                <Button onClick={() => window.open(markerData.data[company].website, '_blank')}>
-                  Open website
+              <fs.Fieldset>
+                <fs.Content>
+                  <fs.Title>Halte {markerData.data[company].name}</fs.Title>
+                  <fs.Subtitle>{markerData.data[company].description}</fs.Subtitle>
+                </fs.Content>
+                <fs.Footer>
+                  <fs.Footer.Actions>
+                  <Button onClick={() => window.open(markerData.data[company].website, '_blank')}>
+                  Website
                 </Button>
-              </div>
+                  </fs.Footer.Actions>
+                </fs.Footer>
+              </fs.Fieldset>
             </Popup>
           </Marker>
         )
