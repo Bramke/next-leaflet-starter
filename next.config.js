@@ -5,6 +5,8 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ["nextjs-components"],
+
   webpack: (config) => {
     config.plugins.push(
       new CopyPlugin({
