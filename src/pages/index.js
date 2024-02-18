@@ -6,23 +6,38 @@ import Section from '@components/Section';
 import Container from '@components/Container';
 import Button from '@components/Button';
 import axios from 'axios';
-
+import useSWR from 'swr'
 import styles from '@styles/Home.module.scss';
 import { useEffect, useState, useRef } from 'react';
-import DottOrBoltMarkers from '@components/Marker/DottOrBoltMarkers';
-import BlueBikeMarkers from '@components/Marker/BlueBikeMarkers';
-import DonkeyMarkers from '@components/Marker/DonkeyMarkers';
-import DeLijnMarkers from '@components/Marker/DeLijnMarkers';
+import DottOrBoltMarkers from '@components/Marker/MicroMobility/DottOrBoltMarkers';
+import BlueBikeMarkers from '@components/Marker/MicroMobility/BlueBikeMarkers';
+import DonkeyMarkers from '@components/Marker/MicroMobility/DonkeyMarkers';
+import DeLijnMarkers from '@components/Marker/PublicTransit/DeLijnMarkers';
 import { useSettings } from '@components/Providers/SettingsProvider';
+import AutoCarsMarkers from '@components/Marker/PublicTransit/AutoCarsMarkers';
+import NmbsMarkers from '@components/Marker/PublicTransit/NmbsMarkers';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
 const DEFAULT_CENTER = [51.05, 3.71667];
 const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
 const BOLT_DATASET_NAME = 'bolt-deelfietsen-gent';
 const COOKIE_RESET_TIME = 120000
+const l58 = require('../components/GeoJson/L_58_1.json');
+const l50_2 = require('../components/GeoJson/L_50_2.json');
+const l50a1 = require('../components/GeoJson/L_50A_1.json')
+const l75 = require('../components/GeoJson/L_75_1.json')
+const l122 = require('../components/GeoJson/L_122_2.json')
+const l50_1 = require('../components/GeoJson/L_50_1.json');
+const l59_1 = require('../components/GeoJson/L_59_1.json');
+const l86_1 = require('../components/GeoJson/L_86_1.json');
+
+
+let geojsondata = l58.concat(l50_2).concat(l75).concat(l50a1).concat(l122).concat(l50_1).concat(l59_1).concat(l86_1)
+
+
 
 export default function Dott() {
-
+  
   const [userLocation, setUserLocation] = useState(DEFAULT_CENTER);
   const getUserLocation = () => {
     const storageLocation = localStorage.getItem('userLocation');
@@ -60,7 +75,7 @@ export default function Dott() {
       {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
         <Container>
             <Map className={styles.homeMap} center={userLocation} zoom={16}>
-              {({ TileLayer, Marker, Popup }) => (
+              {({ TileLayer, Marker, Popup, GeoJSON }) => (
                 <>
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -76,7 +91,10 @@ export default function Dott() {
                     )}
                     {settings.publicTransit && (
                       <>
-                      <DeLijnMarkers Marker={Marker} Popup={Popup} />
+                        <NmbsMarkers Marker={Marker} Popup={Popup} />
+                        <AutoCarsMarkers Marker={Marker} Popup={Popup} />
+                        <DeLijnMarkers Marker={Marker} Popup={Popup} />
+                        <GeoJSON data={geojsondata} />
                       </>
                     )}
                 </>

@@ -16,7 +16,7 @@ export default function BlueBikeMarkers({ Marker, Popup }) {
           <Marker color="blue" key={bikeData.id} position={[bikeData.latitude, bikeData.longitude]}
           icon={L.icon({
               iconUrl: '/leaflet/images/bluebikelogo.png',
-              iconSize: [50, 50]
+              iconSize: [30, 30]
             })}
           >
             <Popup>
