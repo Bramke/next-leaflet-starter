@@ -12,7 +12,7 @@ import { useSettings } from '@components/Providers/SettingsProvider';
 
 const SettingsToggle = () => {
   const { settings, setSettings } = useSettings()
-  // ex settings: { microMobilityMode: true, publicTransit: true };
+  // example settings: {"isMicroMobilityMode":true,"isPublicTransit":true,"microMobilityMode":{"dott":true,"bolt":true,"donkey":true,"bluebike":true},"publicTransit":{"delijn":true,"nmbs":true,"eurolines":true,"flixbus":true,"flibco":true}}
   return (
     <>
       <Entity
@@ -27,7 +27,7 @@ const SettingsToggle = () => {
         }
       >
         <EntityField title="Bike" description={"View rental bikes info"} />
-        <EntityField right description=<><Image src={"/leaflet/images/bolt.png"} alt="Bolt Logo" width={20} height={20}/><Image src={"/leaflet/images/dott.png"} alt="Dott Logo" width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/Donkey.png"} alt="Donkey Logo" width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/bluebikelogo.png"} alt="Blue Bike Logo" width={20} height={20} className={styles.logo}/></> />
+        <EntityField right description=<><Image src={"/leaflet/images/bolt.png"} alt="Bolt Logo" width={20} height={20} style={{ filter: settings.microMobilityMode.bolt ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, microMobilityMode: { ...settings.microMobilityMode, bolt: !settings.microMobilityMode.bolt } })}/><Image src={"/leaflet/images/dott.png"} alt="Dott Logo" width={20} height={20} className={styles.logo} style={{ filter: settings.microMobilityMode.dott ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, microMobilityMode: { ...settings.microMobilityMode, dott: !settings.microMobilityMode.dott } })}/><Image src={"/leaflet/images/Donkey.png"} alt="Donkey Logo" width={20} height={20} className={styles.logo} style={{ filter: settings.microMobilityMode.donkey ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, microMobilityMode: { ...settings.microMobilityMode, donkey: !settings.microMobilityMode.donkey } })}/><Image src={"/leaflet/images/bluebikelogo.png"} alt="Blue Bike Logo" width={20} height={20} className={styles.logo} style={{ filter: settings.microMobilityMode.bluebike ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, microMobilityMode: { ...settings.microMobilityMode, bluebike: !settings.microMobilityMode.bluebike } })}/></> />
       </Entity>
 
       <Spacer />
@@ -44,7 +44,7 @@ const SettingsToggle = () => {
         }
       >
         <EntityField title="Public Transit" description={"View public transit info"} />
-        <EntityField right description=<><Image alt={"nmbs"} src={"/leaflet/images/nmbs.jpeg"} width={20} height={20}/><Image alt={"de_lijn"} src={"/leaflet/images/de_lijn.png"} width={20} height={20} className={styles.logo}/><Image alt={"flibco"} src={"/leaflet/images/flibco.png"} width={20} height={20} className={styles.logo}/><Image alt={"flixbus"} src={"/leaflet/images/flixbus.png"} width={20} height={20} className={styles.logo}/><Image alt={"eurolines"} src={"/leaflet/images/eurolines.png"} width={20} height={20} className={styles.logo}/></> />
+        <EntityField right description=<><Image alt={"nmbs"} src={"/leaflet/images/nmbs.jpeg"} width={20} height={20} style={{ filter: settings.publicTransit.nmbs ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, nmbs: !settings.publicTransit.nmbs } })}/><Image alt={"de_lijn"} src={"/leaflet/images/de_lijn.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.delijn ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, delijn: !settings.publicTransit.delijn } })}/><Image alt={"flibco"} src={"/leaflet/images/flibco.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.flibco ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, flibco: !settings.publicTransit.flibco } })}/><Image alt={"flixbus"} src={"/leaflet/images/flixbus.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.flixbus ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, flixbus: !settings.publicTransit.flixbus } })}/><Image alt={"eurolines"} src={"/leaflet/images/eurolines.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.eurolines ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, eurolines: !settings.publicTransit.eurolines } })}/></> />
       </Entity>
 
     </>
@@ -83,3 +83,4 @@ const Header = () => {
 };
 
 export default Header;
+

@@ -81,20 +81,20 @@ export default function Dott() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                   />
-                    {settings.microMobilityMode && (
+                    {settings.isMicroMobilityMode && (
                       <>
-                        <DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} Marker={Marker} Popup={Popup} />
-                        <DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />
-                        <BlueBikeMarkers Marker={Marker} Popup={Popup} />
-                        <DonkeyMarkers Marker={Marker} Popup={Popup} />
+                      {settings.microMobilityMode.dott && (<DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
+                      {settings.microMobilityMode.bolt && (<DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
+                      {settings.microMobilityMode.bluebike && (<BlueBikeMarkers Marker={Marker} Popup={Popup} />)}
+                      {settings.microMobilityMode.donkey && (<DonkeyMarkers Marker={Marker} Popup={Popup} />)}
                       </>
                     )}
-                    {settings.publicTransit && (
+                    {settings.isPublicTransit && (
                       <>
-                        <NmbsMarkers Marker={Marker} Popup={Popup} />
-                        <AutoCarsMarkers Marker={Marker} Popup={Popup} />
-                        <DeLijnMarkers Marker={Marker} Popup={Popup} />
-                        <GeoJSON data={geojsondata} />
+                      {settings.publicTransit.nmbs && <NmbsMarkers Marker={Marker} Popup={Popup} />}
+                      {settings.publicTransit.nmbs && <GeoJSON data={geojsondata} />}
+                      {settings.publicTransit.autocars && <AutoCarsMarkers Marker={Marker} Popup={Popup} />}
+                      {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
                       </>
                     )}
                 </>
