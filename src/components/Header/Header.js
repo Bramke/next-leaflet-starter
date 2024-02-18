@@ -27,7 +27,7 @@ const SettingsToggle = () => {
         }
       >
         <EntityField title="Bike" description={"View rental bikes info"} />
-        <EntityField right description=<><Image src={"/leaflet/images/bolt.png"} width={20} height={20}/><Image src={"/leaflet/images/dott.png"} width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/Donkey.png"} width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/bluebikelogo.png"} width={20} height={20} className={styles.logo}/></> />
+        <EntityField right description=<><Image src={"/leaflet/images/bolt.png"} alt="Bolt Logo" width={20} height={20}/><Image src={"/leaflet/images/dott.png"} alt="Dott Logo" width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/Donkey.png"} alt="Donkey Logo" width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/bluebikelogo.png"} alt="Blue Bike Logo" width={20} height={20} className={styles.logo}/></> />
       </Entity>
 
       <Spacer />
@@ -44,7 +44,7 @@ const SettingsToggle = () => {
         }
       >
         <EntityField title="Public Transit" description={"View public transit info"} />
-        <EntityField right description=<><img alt={"delijnlogo"} src={"/leaflet/images/De_lijn.png"} width={20} height={20}/><Image src={"/leaflet/images/flibco.png"} width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/flixbus.png"} width={20} height={20} className={styles.logo}/><Image src={"/leaflet/images/eurolines.png"} width={20} height={20} className={styles.logo}/></> />
+        <EntityField right description=<><Image alt={"nmbs"} src={"/leaflet/images/nmbs.jpeg"} width={20} height={20}/><Image alt={"de_lijn"} src={"/leaflet/images/de_lijn.png"} width={20} height={20} className={styles.logo}/><Image alt={"flibco"} src={"/leaflet/images/flibco.png"} width={20} height={20} className={styles.logo}/><Image alt={"flixbus"} src={"/leaflet/images/flixbus.png"} width={20} height={20} className={styles.logo}/><Image alt={"eurolines"} src={"/leaflet/images/eurolines.png"} width={20} height={20} className={styles.logo}/></> />
       </Entity>
 
     </>
