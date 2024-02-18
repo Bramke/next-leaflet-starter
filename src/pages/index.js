@@ -36,34 +36,9 @@ let geojsondata = l58.concat(l50_2).concat(l75).concat(l50a1).concat(l122).conca
 
 export default function Dott() {
   
-  const [userLocation, setUserLocation] = useState(DEFAULT_CENTER);
-  const getUserLocation = () => {
-    const storageLocation = localStorage.getItem('userLocation');
-    const storageTimestamp = localStorage.getItem('userLocationTimestamp');
-    const currentTime = new Date().getTime();
-    if (storageLocation && storageTimestamp && currentTime - storageTimestamp < COOKIE_RESET_TIME) {
-      setUserLocation(JSON.parse(storageLocation));
-    } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const location = [position.coords.latitude, position.coords.longitude];
-          setUserLocation(location);
-          localStorage.setItem('userLocation', JSON.stringify(location));
-          localStorage.setItem('userLocationTimestamp', currentTime.toString());
-        });
-      } else {
-        alert('Geolocation is not supported by your browser.');
-      }
-    }
-  };
-  useEffect(() => {
-    getUserLocation();
-  }, []);
-
   const { settings } = useSettings();
-
   const mapComponent = useMemo(() => (
-    <Map center={userLocation} zoom={16}>
+    <Map center={[(settings?.userLocation?.long||3.71667),(settings?.userLocation?.lat||51.05)]} zoom={16}>
       {({ TileLayer, Marker, Popup, GeoJSON }) => (
         <>
           <TileLayer
@@ -89,7 +64,7 @@ export default function Dott() {
         </>
       )}
     </Map>
-  ), [settings, userLocation]);
+  ), [settings]);
 
   return (
     <Layout>
@@ -100,7 +75,6 @@ export default function Dott() {
       </Head>
 
       <Section>
-        {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
         <Container>
           {mapComponent}
         </Container>

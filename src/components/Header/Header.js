@@ -5,7 +5,7 @@ import { MenuWrapper, MenuButton, Menu, MenuItem, Modal, Text, EntityThumbnail, 
 import HeaderContainer from '@components/HeaderContainer';
 
 import styles from './Header.module.scss';
-import { IconBike, IconBus, IconSettings } from '@tabler/icons-react';
+import { IconBike, IconBus, IconCurrentLocation, IconSettings } from '@tabler/icons-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useSettings } from '@components/Providers/SettingsProvider';
@@ -69,6 +69,26 @@ const SettingsModal = ({active, setActive}) => {
 
 const Header = () => {
   const [active, setActive] = useState(false)
+  const {setSettings} = useSettings()
+  const handleGetLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        console.log("position", position)
+        const location = {
+          long: position.coords.longitude,
+          lat: position.coords.latitude,
+        };
+        setSettings((prevSettings) => ({
+          ...prevSettings,
+          userLocation: location,
+        }));
+      }, (error) => {
+        console.error('Error getting user location:', error);
+      });
+    } else {
+      console.error('Geolocation is not supported by your browser.');
+    }
+  }
   return (
     <header className={styles.header}>
     <SettingsModal active={active} setActive={setActive} />
@@ -81,11 +101,13 @@ const Header = () => {
         <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
       </HeaderContainer> */}
       <Button shape="square" size="large">
-      <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
-</Button>
+        <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
+      </Button>
+      <Button style={{marginTop: '10px'}} shape="square" size="large" onClick={handleGetLocation}>
+        <IconCurrentLocation  color='white' size={21} />
+      </Button>
     </header>
   );
 };
 
 export default Header;
-
