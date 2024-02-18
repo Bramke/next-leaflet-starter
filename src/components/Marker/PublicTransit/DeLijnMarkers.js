@@ -12,7 +12,7 @@ export default function DeLijnMarkers({ Marker, Popup }) {
         return (
           <Marker key={halte.haltenummer} position={[halte.latitude, halte.longitude]}
             icon={L.icon({
-              iconUrl: '/leaflet/images/de_Lijn.png',
+              iconUrl: '/leaflet/images/de_Lijn.svg',
               iconSize: [25, 25]
             })}
           >

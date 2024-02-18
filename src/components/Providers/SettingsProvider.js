@@ -17,15 +17,15 @@ const SettingsProvider = ({ children }) => {
     microMobilityMode: {
       dott: true,
       bolt: true,
-      donkey: true,
-      bluebike: true,
+      donkey: false,
+      bluebike: false,
     },
     publicTransit: {
       delijn: true,
       nmbs: true,
-      eurolines: true,
-      flixbus: true,
-      flibco: true
+      eurolines: false,
+      flixbus: false,
+      flibco: false
     }
 
   };
