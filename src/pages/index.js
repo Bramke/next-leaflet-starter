@@ -13,7 +13,7 @@ import DottOrBoltMarkers from '@components/Marker/DottOrBoltMarkers';
 import BlueBikeMarkers from '@components/Marker/BlueBikeMarkers';
 import DonkeyMarkers from '@components/Marker/DonkeyMarkers';
 import DeLijnMarkers from '@components/Marker/DeLijnMarkers';
-
+import { useSettings } from '@components/Providers/SettingsProvider';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
 const DEFAULT_CENTER = [51.05, 3.71667];
@@ -47,6 +47,7 @@ export default function Dott() {
     getUserLocation();
   }, []);
 
+  const { settings } = useSettings();
   return (
     <Layout>
       <Head>
@@ -65,11 +66,19 @@ export default function Dott() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                   />
-                    <DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} CookieResetTime={COOKIE_RESET_TIME}   Marker={Marker} Popup={Popup} />
-                    <DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} CookieResetTime={COOKIE_RESET_TIME}   Marker={Marker} Popup={Popup} />
-                    <BlueBikeMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
-                    <DonkeyMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
-                    <DeLijnMarkers cookieResetTime={COOKIE_RESET_TIME} Marker={Marker} Popup={Popup} />
+                    {settings.microMobilityMode && (
+                      <>
+                        <DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} Marker={Marker} Popup={Popup} />
+                        <DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />
+                        <BlueBikeMarkers Marker={Marker} Popup={Popup} />
+                        <DonkeyMarkers Marker={Marker} Popup={Popup} />
+                      </>
+                    )}
+                    {settings.publicTransit && (
+                      <>
+                      <DeLijnMarkers Marker={Marker} Popup={Popup} />
+                      </>
+                    )}
                 </>
               )}
             </Map>

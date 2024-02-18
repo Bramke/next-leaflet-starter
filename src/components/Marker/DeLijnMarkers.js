@@ -1,54 +1,13 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import useSWR from 'swr'
 
-export default function DeLijnMarkers({ cookieResetTime, Marker, Popup }) {
-  const [data, setData] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
-
-  const fetchTotalCount = async () => {
-    const response = await axios.get(
-      "https://data.stad.gent/api/explore/v2.1/catalog/datasets/bushaltes-gent/records?order_by=1&limit=1&offset=0&timezone=UTC&include_links=false&include_app_metas=false"
-    );
-    return response.data.total_count
-  };
-
-  useEffect(() => {
-    fetchTotalCount().then((data) => setTotalCount(data));
-  }, []);
-
-  //  'https://data.stad.gent/api/explore/v2.1/catalog/datasets/bushaltes-gent/records?limit=100&offset=0&timezone=UTC&include_links=false&include_app_metas=false' \
-  const customUrl = (limit, offset) => {
-    return `https://data.stad.gent/api/explore/v2.1/catalog/datasets/bushaltes-gent/records?limit=${limit}&offset=${offset}&timezone=UTC&include_links=false&include_app_metas=false`
-  }
-
-  const fetchData = async () => {
-    let limit = 100
-    let offset = 0
-    let newData = []
-    const storageData = localStorage.getItem('DeLijnData');
-    const storageTimestamp = localStorage.getItem('DeLijnDataTimestamp');
-    const currentTime = new Date().getTime();
-
-    if (storageData?.length < 0 && storageTimestamp && currentTime - storageTimestamp < cookieResetTime) {
-      newData = JSON.parse(storageData);
-    } else {
-      while (newData.length < totalCount) {
-        const response = await axios.get(customUrl(limit, offset))
-        newData = newData.concat(response.data.results)
-        offset += limit
-      }
-      localStorage.setItem('DeLijnData', JSON.stringify(newData));
-      localStorage.setItem('DeLijnDataTimestamp', currentTime.toString());
-    }
-    return newData;
-  }
-  useEffect(() => {
-    fetchData().then((data) => setData(data))
-  }, [totalCount, cookieResetTime])
+export default function DeLijnMarkers({ Marker, Popup }) {
+  const { data: markerData } = useSWR('/api/publicTransit/delijn', axios);
 
   return (
     <>
-      { data && data.map((halte) => {
+      { markerData?.data && markerData.data.buses.map((halte) => {
         return (
           <Marker key={halte.haltenummer} position={[halte.latitude, halte.longitude]}
             icon={L.icon({

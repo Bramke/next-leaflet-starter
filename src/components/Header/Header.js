@@ -8,10 +8,11 @@ import styles from './Header.module.scss';
 import { IconBike, IconBus, IconSettings } from '@tabler/icons-react';
 import { useState } from 'react';
 import Image from 'next/image';
+import { useSettings } from '@components/Providers/SettingsProvider';
 
 const SettingsToggle = () => {
-  const [bikeModeActive, setBikeModeActive] = useState(false)
-  const [publicTransitModeActive, setPublicTransitModeActive] = useState(false)
+  const { settings, setSettings } = useSettings()
+  // ex settings: { microMobilityMode: true, publicTransit: true };
   return (
     <>
       <Entity
@@ -19,7 +20,7 @@ const SettingsToggle = () => {
         thumbnail={
           <>
           <EntityThumbnail size={24}>
-            <Toggle checked={bikeModeActive} onChange={() => setBikeModeActive(!bikeModeActive)}/>
+            <Toggle checked={settings.microMobilityMode} onChange={(value) => setSettings({ ...settings, microMobilityMode: value })}/>
             <IconBike size={21} style={{marginLeft: '15px'}}/>
           </EntityThumbnail>
           </>
@@ -36,7 +37,7 @@ const SettingsToggle = () => {
         thumbnail={
           <>
           <EntityThumbnail size={24}>
-            <Toggle checked={publicTransitModeActive} onChange={() => setPublicTransitModeActive(!publicTransitModeActive)}/>
+            <Toggle checked={settings.publicTransit} onChange={(value) => setSettings({ ...settings, publicTransit: value })}/>
             <IconBus size={21} style={{marginLeft: '15px'}}/>
           </EntityThumbnail>
           </>
