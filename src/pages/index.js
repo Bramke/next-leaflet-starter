@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import dynamic from 'next/dynamic'; // Import dynamic from next/dynamic
+import { useMemo } from 'react'; // Import useMemo from react
 
 import Layout from '@components/Layout';
 import Section from '@components/Section';
@@ -31,10 +32,7 @@ const l50_1 = require('../components/GeoJson/L_50_1.json');
 const l59_1 = require('../components/GeoJson/L_59_1.json');
 const l86_1 = require('../components/GeoJson/L_86_1.json');
 
-
 let geojsondata = l58.concat(l50_2).concat(l75).concat(l50a1).concat(l122).concat(l50_1).concat(l59_1).concat(l86_1)
-
-
 
 export default function Dott() {
   
@@ -63,6 +61,36 @@ export default function Dott() {
   }, []);
 
   const { settings } = useSettings();
+
+  const mapComponent = useMemo(() => (
+    <Map center={userLocation} zoom={16}>
+      {({ TileLayer, Marker, Popup, GeoJSON }) => (
+        <>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+          />
+          {settings.isMicroMobilityMode && (
+            <>
+              {settings.microMobilityMode.dott && (<DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
+              {settings.microMobilityMode.bolt && (<DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
+              {settings.microMobilityMode.bluebike && (<BlueBikeMarkers Marker={Marker} Popup={Popup} />)}
+              {settings.microMobilityMode.donkey && (<DonkeyMarkers Marker={Marker} Popup={Popup} />)}
+            </>
+          )}
+          {settings.isPublicTransit && (
+            <>
+              {settings.publicTransit.nmbs && <NmbsMarkers Marker={Marker} Popup={Popup} />}
+              {settings.publicTransit.nmbs && <GeoJSON data={geojsondata} />}
+              {settings.publicTransit.autocars && <AutoCarsMarkers Marker={Marker} Popup={Popup} />}
+              {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
+            </>
+          )}
+        </>
+      )}
+    </Map>
+  ), [settings, userLocation]);
+
   return (
     <Layout>
       <Head>
@@ -72,37 +100,11 @@ export default function Dott() {
       </Head>
 
       <Section>
-      {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
+        {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
         <Container>
-            <Map center={userLocation} zoom={16}>
-              {({ TileLayer, Marker, Popup, GeoJSON }) => (
-                <>
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                  />
-                    {settings.isMicroMobilityMode && (
-                      <>
-                      {settings.microMobilityMode.dott && (<DottOrBoltMarkers DatasetName={DOTT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
-                      {settings.microMobilityMode.bolt && (<DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
-                      {settings.microMobilityMode.bluebike && (<BlueBikeMarkers Marker={Marker} Popup={Popup} />)}
-                      {settings.microMobilityMode.donkey && (<DonkeyMarkers Marker={Marker} Popup={Popup} />)}
-                      </>
-                    )}
-                    {settings.isPublicTransit && (
-                      <>
-                      {settings.publicTransit.nmbs && <NmbsMarkers Marker={Marker} Popup={Popup} />}
-                      {settings.publicTransit.nmbs && <GeoJSON data={geojsondata} />}
-                      {settings.publicTransit.autocars && <AutoCarsMarkers Marker={Marker} Popup={Popup} />}
-                      {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
-                      </>
-                    )}
-                </>
-              )}
-            </Map>
+          {mapComponent}
         </Container>
       </Section>
     </Layout>
   );
 }
-
