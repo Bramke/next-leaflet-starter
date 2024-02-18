@@ -11,7 +11,24 @@ export const useSettings = () => {
 };
 
 const SettingsProvider = ({ children }) => {
-  const defaultSettings = { microMobilityMode: true, publicTransit: true };
+  const defaultSettings = {
+    isMicroMobilityMode: true,
+    isPublicTransit: true,
+    microMobilityMode: {
+      dott: true,
+      bolt: true,
+      donkey: true,
+      bluebike: true,
+    },
+    publicTransit: {
+      delijn: true,
+      nmbs: true,
+      eurolines: true,
+      flixbus: true,
+      flibco: true
+    }
+
+  };
   const [settings, setSettings] = useState(defaultSettings);
 
   useEffect(() => {

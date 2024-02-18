@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 const STATION_NAMES = ["GENTBRUGGE", "GENT-SINT-PIETERS", "GENT-DAMPOORT", 'DRONGEN', 'EVERGEM', 'WONDELGEM', 'MERELBEKE']
-const SPOORWEG_IDS = [239]
 export default async (req, res) => {
   const customUrl = (stationName) => `https://infrabel.opendatasoft.com/api/explore/v2.1/catalog/datasets/maandelijkse-stiptheid-per-stopplaats/records?where=installatienaam_nederlands%3D%22${stationName}%22&limit=100`;
   let stationData = {};

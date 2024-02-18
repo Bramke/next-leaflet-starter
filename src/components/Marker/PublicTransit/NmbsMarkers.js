@@ -5,7 +5,6 @@ import Button from '@components/Button';
 
 export default function NmbsMarkers({ Marker, Popup }) {
   const { data: markerData } = useSWR('/api/publicTransit/nmbs', axios);
-  console.log("markerData", markerData?.data)
 
   return (
     <>
