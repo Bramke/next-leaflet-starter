@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
-import { MenuWrapper, MenuButton, Menu, MenuItem, Modal, Text, EntityThumbnail, Entity, EntityField, Spacer, Toggle} from 'nextjs-components'
+import { MenuWrapper, MenuButton, Menu, MenuItem, Modal, Text, EntityThumbnail, Entity, EntityField, Spacer, Toggle, Button} from 'nextjs-components'
 
 import HeaderContainer from '@components/HeaderContainer';
 
@@ -58,7 +58,9 @@ const SettingsModal = ({active, setActive}) => {
           <Modal.Header>
             <Modal.Title>Settings</Modal.Title>
           </Modal.Header>
-          <Text size={16} style={{margin: "10px"}}>Adjust display preferences using the toggles below.</Text>
+          <Text size={16} style={{margin: "10px"}}>
+            Click on the logos to toggle the display of data
+          </Text>
           <SettingsToggle />
         </Modal.Body>
       </Modal.Modal>
@@ -70,14 +72,17 @@ const Header = () => {
   return (
     <header className={styles.header}>
     <SettingsModal active={active} setActive={setActive} />
-      <HeaderContainer className={styles.headerContainer}>
+      {/* <HeaderContainer className={styles.headerContainer}>
         <p className={styles.headerTitle}>
           <Link href="/">
             Ghent rental bike visualisation
           </Link>
         </p>
         <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
-      </HeaderContainer>
+      </HeaderContainer> */}
+      <Button shape="square" size="large">
+      <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
+</Button>
     </header>
   );
 };

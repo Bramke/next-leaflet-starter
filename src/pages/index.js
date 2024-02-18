@@ -74,7 +74,7 @@ export default function Dott() {
       <Section>
       {userLocation === null && <Button onClick={getUserLocation}>Locate Me</Button>}
         <Container>
-            <Map className={styles.homeMap} center={userLocation} zoom={16}>
+            <Map center={userLocation} zoom={16}>
               {({ TileLayer, Marker, Popup, GeoJSON }) => (
                 <>
                   <TileLayer
