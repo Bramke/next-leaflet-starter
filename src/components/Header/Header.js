@@ -43,7 +43,7 @@ const SettingsToggle = () => {
         }
       >
         <EntityField title="Public Transit" description={"View public transit info"} />
-        <EntityField right description=<><Image src={"/leaflet/images/De_lijn.png"} width={20} height={20}/></> />
+        <EntityField right description=<><img alt={"delijnlogo"} src={"/leaflet/images/De_lijn.png"} width={20} height={20}/></> />
       </Entity>
 
     </>
