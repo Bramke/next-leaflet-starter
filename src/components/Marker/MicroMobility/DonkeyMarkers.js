@@ -28,7 +28,7 @@ export default function DonkeyMarkers({ Marker, Popup }) {
                 </fs.Content>
                 <fs.Footer>
                   <fs.Footer.Actions>
-                    <Button href='https://dnky.bike/'>
+                    <Button href='https://dnky.bike/4I2RIOBOVyb'>
                       More info
                     </Button>
                   </fs.Footer.Actions>
