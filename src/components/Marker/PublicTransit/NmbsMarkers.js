@@ -10,7 +10,7 @@ export default function NmbsMarkers({ Marker, Popup }) {
     <>
       {['GENT-DAMPOORT', 'GENT-SINT-PIETERS', 'GENTBRUGGE', 'DRONGEN', 'EVERGEM', 'WONDELGEM', 'MERELBEKE'].map((station) => (
         markerData?.data?.[station] && (
-          <Marker key={markerData.data[station].name} position={[markerData.data[station].lat, markerData.data[station].lon]}
+          <Marker key={station} position={[markerData.data[station].lat, markerData.data[station].lon]}
             icon={L.icon({
                 iconUrl: `/leaflet/images/nmbs.jpeg`,
                 iconSize: [40, 40]

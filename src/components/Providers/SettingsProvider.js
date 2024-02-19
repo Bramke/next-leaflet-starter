@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useGeolocated } from "react-geolocated";
 
 const SettingsContext = createContext();
 
@@ -26,12 +27,7 @@ const SettingsProvider = ({ children }) => {
       eurolines: false,
       flixbus: false,
       flibco: false
-    },
-    userLocation: {
-      long: 51.05,
-      lat: 3.71667,
     }
-
   };
   const [settings, setSettings] = useState(defaultSettings);
 
@@ -51,28 +47,13 @@ const SettingsProvider = ({ children }) => {
     }
   }, [settings]);
 
-  useEffect(() => {
-    const getUserLocation = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const location = {
-            long: position.coords.longitude,
-            lat: position.coords.latitude,
-          };
-          setSettings((prevSettings) => ({
-            ...prevSettings,
-            userLocation: location,
-          }));
-        }, (error) => {
-          console.error('Error getting user location:', error);
-        });
-      } else {
-        console.error('Geolocation is not supported by your browser.');
-      }
-    };
+  const { error } = useGeolocated();
 
-    getUserLocation();
-  }, []);
+  useEffect(() => {
+    if (error) {
+      console.error('Error getting user location:', error);
+    }
+  }, [error]);
 
   return (
     <SettingsContext.Provider value={{ settings, setSettings }}>

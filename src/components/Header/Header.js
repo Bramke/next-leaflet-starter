@@ -10,6 +10,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useSettings } from '@components/Providers/SettingsProvider';
 
+
 const SettingsToggle = () => {
   const { settings, setSettings } = useSettings()
   // example settings: {"isMicroMobilityMode":true,"isPublicTransit":true,"microMobilityMode":{"dott":true,"bolt":true,"donkey":true,"bluebike":true},"publicTransit":{"delijn":true,"nmbs":true,"eurolines":true,"flixbus":true,"flibco":true}}
@@ -103,9 +104,11 @@ const Header = () => {
       <Button shape="square" size="large">
         <IconSettings color='white' size={21} onClick={()=>setActive(true)}/>
       </Button>
+      {/* TODO: FIX or remove
+      
       <Button style={{marginTop: '10px'}} shape="square" size="large" onClick={handleGetLocation}>
         <IconCurrentLocation  color='white' size={21} />
-      </Button>
+      </Button> */}
     </header>
   );
 };

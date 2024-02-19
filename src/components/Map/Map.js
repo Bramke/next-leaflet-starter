@@ -9,7 +9,7 @@ const DynamicMap = dynamic(() => import('./DynamicMap'), {
 
 //default is 80vh
 const DEFAULT_WIDTH = window.innerWidth
-const DEFAULT_HEIGHT = window.innerHeight * 0.88;
+const DEFAULT_HEIGHT = window.innerHeight
 
 const Map = (props) => {
   const { width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT } = props;
