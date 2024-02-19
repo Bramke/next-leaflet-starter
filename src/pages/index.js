@@ -19,10 +19,8 @@ import AutoCarsMarkers from '@components/Marker/PublicTransit/AutoCarsMarkers';
 import NmbsMarkers from '@components/Marker/PublicTransit/NmbsMarkers';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
-const DEFAULT_CENTER = [51.05, 3.71667];
 const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
 const BOLT_DATASET_NAME = 'bolt-deelfietsen-gent';
-const COOKIE_RESET_TIME = 120000
 const l58 = require('../components/GeoJson/L_58_1.json');
 const l50_2 = require('../components/GeoJson/L_50_2.json');
 const l50a1 = require('../components/GeoJson/L_50A_1.json')
@@ -38,7 +36,7 @@ export default function Dott() {
   
   const { settings } = useSettings();
   const mapComponent = useMemo(() => (
-    <Map center={[(settings?.userLocation?.long||3.71667),(settings?.userLocation?.lat||51.05)]} zoom={16}>
+    <Map zoom={16}>
       {({ TileLayer, Marker, Popup, GeoJSON }) => (
         <>
           <TileLayer
