@@ -26,7 +26,13 @@ export default async (req, res) => {
       data = data.filter((result) => result?.is_disabled === 0);
       // Remove duplicates
       data = data.filter((result, index, self) => self.findIndex((t) => t.bike_id === result.bike_id) === index);
-
+      // Json parse the result.rental_uris
+      data = data.map((result) => {
+        return {
+          ...result,
+          rental_uris: JSON.parse(result.rental_uris)
+        };
+      });
       return data
   }
   res.statusCode = 200

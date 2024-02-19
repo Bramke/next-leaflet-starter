@@ -13,7 +13,6 @@ const DottOrBoltMarkers = ({DatasetName, Marker, Popup}) => {
   const markerType = DatasetName === "dott-deelfietsen-gent" ? MarkerType.DOT : MarkerType.BOLT;
   
   const { data: markerData } = useSWR(markerType === MarkerType.DOT ? '/api/microMobility/dott' : '/api/microMobility/bolt', axios);
-
    /**
    * Generates style object based on the current range in meters.
    * Red when less than 5 km
@@ -58,7 +57,7 @@ const DottOrBoltMarkers = ({DatasetName, Marker, Popup}) => {
                 </fs.Content>
                 <fs.Footer>
                   <fs.Footer.Actions>
-                    <Button href={JSON.parse(bike?.rental_uris).ios}>Rent Bike</Button>
+                    <Button href={bike?.rental_uris.ios}>Rent Bike</Button>
                   </fs.Footer.Actions>
                 </fs.Footer>
               </fs.Fieldset>
