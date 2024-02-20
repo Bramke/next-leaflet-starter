@@ -41,7 +41,13 @@ export default function MobilityGhent() {
       {({ TileLayer, Marker, Popup, GeoJSON }) => (
         <>
           <TileLayer
-            url={settings.mapMode === 'light' ? 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png' : settings.lightMode == 'dark' ? 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png' : 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'}
+            url={
+              settings.mapMode === 'dark' ? 
+                'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png' : 
+              settings.mapMode === 'world' ? 
+                'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' :
+              'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
+            }
             attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           />
           {settings.isMicroMobilityMode && (
