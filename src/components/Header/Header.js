@@ -1,48 +1,17 @@
 import { Modal, Text, EntityThumbnail, Entity, EntityField, Spacer, Toggle, Button } from 'nextjs-components'
 
 import styles from './Header.module.scss';
-import { IconBike, IconBus, IconCurrentLocation, IconMoon, IconSettings, IconSun, IconWorld } from '@tabler/icons-react';
+import { IconBike, IconBus, IconCurrentLocation, IconMoon, IconRefreshAlert, IconSettings, IconSun, IconWorld } from '@tabler/icons-react';
 import { useState } from 'react';
 import Image from 'next/image';
 import { useSettings } from '@components/Providers/SettingsProvider';
 
 
 const SettingsToggle = () => {
-  const { settings, setSettings } = useSettings()
+  const { settings, setSettings, resetToDefault } = useSettings()
+
   return (
     <>
-      <Entity
-        thumbnail={
-          <>
-            <EntityThumbnail size={24}>
-              {settings.mapMode == 'light' ? <IconSun size={21} style={{ marginLeft: '15px' }} /> : settings.mapMode == 'dark' ? <IconMoon size={21} style={{ marginLeft: '15px' }} /> : <IconWorld size={21} style={{ marginLeft: '15px' }} />}
-            </EntityThumbnail>
-          </>
-        }
-      >
-        <EntityField title="Mode" description={"Toggle between light and dark mode"} />
-        <EntityField right description=<><IconSun
-          size={21}
-          style={{ marginLeft: '15px' }}
-          color={settings.mapMode === 'light' ? 'green' : 'black'}
-          onClick={() => setSettings({ ...settings, mapMode: 'light' })}
-        />
-          <IconMoon
-            size={21}
-            style={{ marginLeft: '15px' }}
-            color={settings.mapMode === 'dark' ? 'green' : 'black'}
-            onClick={() => setSettings({ ...settings, mapMode: 'dark' })}
-          />
-          <IconWorld
-            size={21}
-            style={{ marginLeft: '15px' }}
-            color={settings.mapMode === 'world' ? 'green' : 'black'}
-            onClick={() => setSettings({ ...settings, mapMode: 'world' })}
-          /></> />
-      </Entity>
-
-
-      <Spacer />
       <Entity
         //placeholder={!isMounted}
         thumbnail={
@@ -73,6 +42,22 @@ const SettingsToggle = () => {
       >
         <EntityField title="Public Transit" description={"View public transit info"} />
         <EntityField right description=<><Image alt={"nmbs"} src={"/leaflet/images/nmbs.jpeg"} width={20} height={20} style={{ filter: settings.publicTransit.nmbs ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, nmbs: !settings.publicTransit.nmbs } })} /><Image alt={"de_lijn"} src={"/leaflet/images/delijn.jpeg"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.delijn ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, delijn: !settings.publicTransit.delijn } })} /><Image alt={"flibco"} src={"/leaflet/images/flibco.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.flibco ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, flibco: !settings.publicTransit.flibco } })} /><Image alt={"flixbus"} src={"/leaflet/images/flixbus.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.flixbus ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, flixbus: !settings.publicTransit.flixbus } })} /><Image alt={"eurolines"} src={"/leaflet/images/eurolines.png"} width={20} height={20} className={styles.logo} style={{ filter: settings.publicTransit.eurolines ? 'none' : 'grayscale(100%)' }} onClick={() => setSettings({ ...settings, publicTransit: { ...settings.publicTransit, eurolines: !settings.publicTransit.eurolines } })} /></> />
+      </Entity>
+
+      <Spacer />
+
+      <Entity
+        //placeholder={!isMounted}
+        thumbnail={
+          <>
+            <EntityThumbnail size={24}>
+              <IconRefreshAlert size={21} style={{ marginLeft: '15px' }} />
+            </EntityThumbnail>
+          </>
+        }
+      >
+        <EntityField title="Reset App" description={"Delete all stored settings"} />
+        <EntityField right description=<><Button type="secondary" variant="ghost" onClick={resetToDefault}>Reset data</Button></> />
       </Entity>
 
     </>

@@ -18,7 +18,7 @@ const SettingsProvider = ({ children }) => {
     microMobilityMode: {
       dott: true,
       bolt: true,
-      donkey: false,
+      donkey: true,
       bluebike: false,
     },
     publicTransit: {
@@ -40,7 +40,10 @@ const SettingsProvider = ({ children }) => {
     }
   });
   
-  
+  const resetToDefault = () => {
+    setSettings(defaultSettings);
+    window.location.reload();
+  }
 
   useEffect(() => {
     const storedSettings = localStorage.getItem('settings');
@@ -66,7 +69,7 @@ const SettingsProvider = ({ children }) => {
   }, [error]);
 
   return (
-    <SettingsContext.Provider value={{ settings, setSettings }}>
+    <SettingsContext.Provider value={{ settings, setSettings, resetToDefault }}>
       {children}
     </SettingsContext.Provider>
   );
