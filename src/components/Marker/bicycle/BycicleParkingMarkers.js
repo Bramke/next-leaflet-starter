@@ -24,7 +24,7 @@ export default function BycicleParkingMarkers({ Marker, Popup }) {
             position={[fietsenStalling.geo_point_2d?.lat, fietsenStalling.geo_point_2d?.lon]}
             icon={L.icon({
               iconUrl: `/leaflet/images/bikeparking.svg`,
-              iconSize: [30, 30],
+              iconSize: [20, 20],
             })}
           >
             <Popup>

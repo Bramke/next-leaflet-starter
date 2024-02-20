@@ -73,7 +73,7 @@ export default async (req, res) => {
       const bikeParkingLat = bikeParking.geo_point_2d.lat;
       const bikeParkingLon = bikeParking.geo_point_2d.lon;
       const distance = Math.sqrt((lat - bikeParkingLat) ** 2 + (lon - bikeParkingLon) ** 2);
-      return distance <= 0.005;
+      return distance <= 0.003;
     });
 
     return filteredBikeParkings;
