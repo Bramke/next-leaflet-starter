@@ -50,6 +50,7 @@ export default function MobilityGhent() {
               {settings.microMobilityMode.bolt && (<DottOrBoltMarkers DatasetName={BOLT_DATASET_NAME} Marker={Marker} Popup={Popup} />)}
               {settings.microMobilityMode.bluebike && (<BlueBikeMarkers Marker={Marker} Popup={Popup} />)}
               {settings.microMobilityMode.donkey && (<DonkeyMarkers Marker={Marker} Popup={Popup} />)}
+              {settings.microMobilityMode.bikeParking && (<BycicleParkingMarkers Marker={Marker} Popup={Popup} />)}
             </>
           )}
           {settings.isPublicTransit && (
@@ -60,7 +61,6 @@ export default function MobilityGhent() {
               {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
             </>
           )}
-          <BycicleParkingMarkers Marker={Marker} Popup={Popup} />
           {coords && (
             <Marker color="blue" position={[coords.latitude, coords.longitude]} 
              icon={L.icon({

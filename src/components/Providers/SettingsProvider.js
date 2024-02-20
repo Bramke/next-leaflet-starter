@@ -20,6 +20,7 @@ const SettingsProvider = ({ children }) => {
       bolt: true,
       donkey: true,
       bluebike: false,
+      bikeParking: true
     },
     publicTransit: {
       delijn: true,
