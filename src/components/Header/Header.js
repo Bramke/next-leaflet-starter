@@ -101,7 +101,6 @@ const Header = () => {
   const handleGetLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
-        console.log("position", position)
         const location = {
           long: position.coords.longitude,
           lat: position.coords.latitude,

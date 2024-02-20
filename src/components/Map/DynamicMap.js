@@ -35,8 +35,6 @@ const Map = ({ children, className, width, height, ...rest }) => {
     setMapCenter([coords?.latitude||51.0538286, coords?.longitude||3.7250121]); // Update mapCenter when user location changes
   }, [coords?.latitude, coords?.longitude]);
 
-  console.log(mapCenter)
-
   if (coords?.longitude && coords?.latitude) {
     return (
       <MapContainer key={coords.latitude + coords.longitude} className={mapClassName} center={mapCenter} {...rest}> {/* Updated center prop */}

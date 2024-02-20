@@ -7,7 +7,6 @@ import { IconInfoCircle } from '@tabler/icons-react';
 
 export default function DonkeyMarkers({ Marker, Popup }) {
   const { data: markerData } = useSWR('/api/microMobility/donkey', axios);
-  console.log("kjmlkjjk", markerData)
   return (
     <>
       {markerData?.data && markerData.data.bikes.map((station) => (

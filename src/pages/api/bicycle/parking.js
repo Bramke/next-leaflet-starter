@@ -66,7 +66,6 @@ export default async (req, res) => {
     return fietsenstallingArray;
   }
   const bikeParkings = await readBikeParkings();
-  console.log(bikeParkings.length);
   //filter out the bike parkings that are within 500m of the given lat and lon
   const filterBikeParkings = async (bikeParkings) => {
     const filteredBikeParkings = bikeParkings.filter((bikeParking) => {
@@ -79,7 +78,6 @@ export default async (req, res) => {
     return filteredBikeParkings;
   }
   const filteredBikeParkings = await filterBikeParkings(bikeParkings);
-  console.log(filteredBikeParkings.length);
   try {
     res.status(200).json(filteredBikeParkings);
   } catch (error) {

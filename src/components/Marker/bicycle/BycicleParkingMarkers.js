@@ -8,7 +8,6 @@ export default function BycicleParkingMarkers({ Marker, Popup }) {
   const { coords } = useGeolocated();
   const { data: markerData } = useSWR('/api/bicycle/parking', (url) => axios.post(url, { geo_point_2d: { lat: coords.latitude, lon: coords.longitude } }).then((res) => res));
 
-  console.log(markerData);
   if (!coords) {
     // If coords is not defined, return null or any loading indicator
     return null;
