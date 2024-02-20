@@ -42,13 +42,15 @@ export default function MobilityGhent() {
         <>
           <TileLayer
             url={
+              settings?.mapMode === undefined ?
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' :
               settings.mapMode === 'dark' ? 
                 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png' : 
               settings.mapMode === 'world' ? 
                 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' :
               'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'
             }
-            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+            attribution="&copy; OpenStreetMap, ESRI, CartoDB contributors"
           />
           {settings.isMicroMobilityMode && (
             <>
