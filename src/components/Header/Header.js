@@ -11,7 +11,7 @@ const SettingsToggle = () => {
   const { settings, setSettings, resetToDefault } = useSettings()
 
   return (
-    <>
+    <div className={styles.settingsToggle}>
       <Entity
         //placeholder={!isMounted}
         thumbnail={
@@ -60,7 +60,7 @@ const SettingsToggle = () => {
         <EntityField right description=<><Button type="secondary" variant="ghost" onClick={resetToDefault}>Reset data</Button></> />
       </Entity>
 
-    </>
+    </div>
   );
 };
 
