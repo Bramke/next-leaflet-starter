@@ -1,8 +1,4 @@
-import Link from 'next/link';
-import { FaGithub } from 'react-icons/fa';
-import { MenuWrapper, MenuButton, Menu, MenuItem, Modal, Text, EntityThumbnail, Entity, EntityField, Spacer, Toggle, Button } from 'nextjs-components'
-
-import HeaderContainer from '@components/HeaderContainer';
+import { Modal, Text, EntityThumbnail, Entity, EntityField, Spacer, Toggle, Button } from 'nextjs-components'
 
 import styles from './Header.module.scss';
 import { IconBike, IconBus, IconCurrentLocation, IconMoon, IconSettings, IconSun, IconWorld } from '@tabler/icons-react';
@@ -13,7 +9,6 @@ import { useSettings } from '@components/Providers/SettingsProvider';
 
 const SettingsToggle = () => {
   const { settings, setSettings } = useSettings()
-  // example settings: {"isMicroMobilityMode":true,"isPublicTransit":true,"microMobilityMode":{"dott":true,"bolt":true,"donkey":true,"bluebike":true},"publicTransit":{"delijn":true,"nmbs":true,"eurolines":true,"flixbus":true,"flibco":true}}
   return (
     <>
       <Entity
