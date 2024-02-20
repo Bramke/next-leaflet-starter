@@ -41,7 +41,7 @@ export default function MobilityGhent() {
       {({ TileLayer, Marker, Popup, GeoJSON }) => (
         <>
           <TileLayer
-            url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+            url={'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'}
             attribution="&copy; OpenStreetMap, ESRI, CartoDB contributors"
           />
           {settings.isMicroMobilityMode && (
