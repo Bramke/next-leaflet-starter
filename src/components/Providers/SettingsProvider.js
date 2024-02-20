@@ -30,22 +30,31 @@ const SettingsProvider = ({ children }) => {
     },
     mapMode: 'light'
   };
-  const [settings, setSettings] = useState(defaultSettings);
+
+  const [settings, setSettings] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const storedSettings = localStorage.getItem('settings');
+      return storedSettings ? JSON.parse(storedSettings) : defaultSettings;
+    } else {
+      return defaultSettings;
+    }
+  });
+  
+  
 
   useEffect(() => {
     const storedSettings = localStorage.getItem('settings');
+    console.log('storedSettings', storedSettings)
     if (storedSettings) {
-      const parsedSettings = JSON.parse(storedSettings);
-      if (Object.keys(parsedSettings).length > 0) {
-        setSettings(parsedSettings);
-      }
+      setSettings(JSON.parse(storedSettings));
+    } else {
+      console.log("setting default settings")
+      localStorage.setItem('settings', JSON.stringify(defaultSettings));
     }
   }, []);
 
   useEffect(() => {
-    if (Object.keys(settings).length > 0) {
-      localStorage.setItem('settings', JSON.stringify(settings));
-    }
+    localStorage.setItem('settings', JSON.stringify(settings));
   }, [settings]);
 
   const { error } = useGeolocated();
