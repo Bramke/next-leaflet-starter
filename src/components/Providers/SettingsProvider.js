@@ -28,7 +28,7 @@ const SettingsProvider = ({ children }) => {
       flixbus: false,
       flibco: false
     },
-    mapMode: 'light'
+    themeMode: 'light'
   };
 
   const [settings, setSettings] = useState(() => {
