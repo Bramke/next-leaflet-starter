@@ -48,7 +48,6 @@ const SettingsProvider = ({ children }) => {
 
   useEffect(() => {
     const storedSettings = localStorage.getItem('settings');
-    console.log('storedSettings', storedSettings)
     if (storedSettings) {
       setSettings(JSON.parse(storedSettings));
     } else {

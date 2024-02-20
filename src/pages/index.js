@@ -37,8 +37,8 @@ export default function MobilityGhent() {
   const {coords} = useGeolocated()
   const { settings } = useSettings();
   const mapComponent = useMemo(() => (
-    <Map zoom={16}>
-      {({ TileLayer, Marker, Popup, GeoJSON }) => (
+    <Map zoom={17}>
+      {({ TileLayer, Marker, Popup, GeoJSON, useMap }) => (
         <>
           <TileLayer
             url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
@@ -61,14 +61,14 @@ export default function MobilityGhent() {
               {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
             </>
           )}
-          {coords && (
+          {/* {coords && (
             <Marker color="blue" position={[coords.latitude, coords.longitude]} 
              icon={L.icon({
                 iconUrl: `/leaflet/images/userlocation.svg`,
                 iconSize: [40, 40]
               })}
               ></Marker>
-          )}
+          )} */}
         </>
       )}
     </Map>
