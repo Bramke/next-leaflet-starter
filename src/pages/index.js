@@ -5,10 +5,8 @@ import { useMemo } from 'react'; // Import useMemo from react
 import Layout from '@components/Layout';
 import Section from '@components/Section';
 import Container from '@components/Container';
-import Button from '@components/Button';
-import axios from 'axios';
-import useSWR from 'swr'
-import styles from '@styles/Home.module.scss';
+import { useGeolocated } from "react-geolocated"; // Added useGeolocated
+
 import { useEffect, useState, useRef } from 'react';
 import DottOrBoltMarkers from '@components/Marker/MicroMobility/DottOrBoltMarkers';
 import BlueBikeMarkers from '@components/Marker/MicroMobility/BlueBikeMarkers';
@@ -17,6 +15,8 @@ import DeLijnMarkers from '@components/Marker/PublicTransit/DeLijnMarkers';
 import { useSettings } from '@components/Providers/SettingsProvider';
 import AutoCarsMarkers from '@components/Marker/PublicTransit/AutoCarsMarkers';
 import NmbsMarkers from '@components/Marker/PublicTransit/NmbsMarkers';
+import useSWR from 'swr';
+import axios from 'axios';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
 const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
@@ -32,8 +32,8 @@ const l86_1 = require('../components/GeoJson/L_86_1.json');
 
 let geojsondata = l58.concat(l50_2).concat(l75).concat(l50a1).concat(l122).concat(l50_1).concat(l59_1).concat(l86_1)
 
-export default function Dott() {
-  
+export default function MobilityGhent() {
+  const {coords} = useGeolocated()
   const { settings } = useSettings();
   const mapComponent = useMemo(() => (
     <Map zoom={16}>
@@ -59,16 +59,24 @@ export default function Dott() {
               {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
             </>
           )}
+          {coords && (
+            <Marker color="blue" position={[coords.latitude, coords.longitude]} 
+             icon={L.icon({
+                iconUrl: `/leaflet/images/userlocation.svg`,
+                iconSize: [40, 40]
+              })}
+              ></Marker>
+          )}
         </>
       )}
     </Map>
-  ), [settings]);
+  ), [settings, coords]);
 
   return (
     <Layout>
       <Head>
-        <title>Ghent Rental Bike</title>
-        <meta name="description" content="Create mapping apps with Next.js Leaflet Starter" />
+        <title>Mobility Ghent - City of Ghent Mobility Aggregator</title>
+        <meta name="description" content="Explore the comprehensive mobility options in Ghent with our aggregator" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
