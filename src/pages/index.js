@@ -17,6 +17,7 @@ import AutoCarsMarkers from '@components/Marker/PublicTransit/AutoCarsMarkers';
 import NmbsMarkers from '@components/Marker/PublicTransit/NmbsMarkers';
 import useSWR from 'swr';
 import axios from 'axios';
+import BycicleParkingMarkers from '@components/Marker/bicycle/BycicleParkingMarkers';
 const Map = dynamic(() => import('@components/Map'), { ssr: false }); // Dynamically import Map component
 
 const DOTT_DATASET_NAME = 'dott-deelfietsen-gent';
@@ -59,6 +60,7 @@ export default function MobilityGhent() {
               {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
             </>
           )}
+          <BycicleParkingMarkers Marker={Marker} Popup={Popup} />
           {coords && (
             <Marker color="blue" position={[coords.latitude, coords.longitude]} 
              icon={L.icon({
