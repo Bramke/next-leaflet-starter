@@ -27,7 +27,8 @@ const SettingsProvider = ({ children }) => {
       eurolines: false,
       flixbus: false,
       flibco: false
-    }
+    },
+    mapMode: 'light'
   };
   const [settings, setSettings] = useState(defaultSettings);
 
