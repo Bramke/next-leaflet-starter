@@ -56,7 +56,7 @@ export default function MobilityGhent() {
             <>
               {settings.publicTransit.nmbs && <NmbsMarkers Marker={Marker} Popup={Popup} />}
               {settings.publicTransit.nmbs && <GeoJSON data={geojsondata} />}
-              {settings.publicTransit.autocars && <AutoCarsMarkers Marker={Marker} Popup={Popup} />}
+              {(settings.publicTransit.eurolines || settings.publicTransit.flixbus || settings.publicTransit.flibco) && <AutoCarsMarkers Marker={Marker} Popup={Popup} />}
               {settings.publicTransit.delijn && <DeLijnMarkers Marker={Marker} Popup={Popup} />}
             </>
           )}
